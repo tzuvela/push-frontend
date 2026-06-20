@@ -29,7 +29,7 @@ document.getElementById("subscribe").addEventListener("click", async() => {
         body: JSON.stringify(subscription)
     });
 
-    alert("Subscribed succesfully.")
+    alert("Subscribed successfully.")
 });
 
 async function getVapidPublicKey(){
