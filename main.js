@@ -32,6 +32,26 @@ document.getElementById("subscribe").addEventListener("click", async() => {
     alert("Subscribed successfully.")
 });
 
+async function sendTestNotification() {
+    try {
+        const response = await fetch("https://push-backend-1d53.onrender.com/send", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                message: "Hello from the frontend test button!"
+            })
+        });
+
+        const result = await response.json();
+        alert("Notification sent! Sent: " + result.sent + ", Failed: " + result.failed);
+    } catch (err) {
+        console.error("Error sending test notification:", err);
+        alert("Failed to send test notification.");
+    }
+}
+
+
+
 async function getVapidPublicKey(){
     // const res = await fetch("/vapidPublicKey");
     // const res = await fetch("http://127.0.0.1:5000/vapidPublicKey");
@@ -59,3 +79,4 @@ function urlBase64ToUint8Array(base64String){
     return outputArray;
 }
 
+document.getElementById("sendTest").addEventListener("click", sendTestNotification)
