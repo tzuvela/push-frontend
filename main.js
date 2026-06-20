@@ -29,7 +29,7 @@ document.getElementById("subscribe").addEventListener("click", async() => {
         body: JSON.stringify(subscription)
     });
 
-    alert("Service worker registered. Backend coming next,")
+    alert("Subscribed succesfully.")
 });
 
 async function getVapidPublicKey(){
