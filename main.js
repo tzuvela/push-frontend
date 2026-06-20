@@ -30,6 +30,8 @@ document.getElementById("subscribe").addEventListener("click", async() => {
     });
 
     alert("Subscribed successfully.")
+    document.getElementById("subscribe").disabled = true;
+
 });
 
 async function sendTestNotification() {
@@ -79,4 +81,42 @@ function urlBase64ToUint8Array(base64String){
     return outputArray;
 }
 
-document.getElementById("sendTest").addEventListener("click", sendTestNotification)
+async function unsubscribeUser() {
+    try {
+        const registration = await navigator.serviceWorker.getRegistration();
+        if (!registration) {
+            alert("Service worker not found");
+            return;
+        }
+
+        const subscription = await registration.pushManager.getSubscription();
+        if (!subscription) {
+            alert("You are not subscribed");
+            return;
+        }
+
+        // Unsubscribe in the browser
+        const success = await subscription.unsubscribe();
+        if (!success) {
+            alert("Failed to unsubscribe locally");
+            return;
+        }
+
+        // Notify backend to remove subscription
+        await fetch("https://push-backend-1d53.onrender.com/unsubscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ endpoint: subscription.endpoint })
+        });
+
+        alert("Unsubscribed successfully");
+        document.getElementById("subscribe").disabled = false;
+
+    } catch (err) {
+        console.error("Unsubscribe error:", err);
+        alert("Error during unsubscribe");
+    }
+}
+
+document.getElementById("sendTest").addEventListener("click", sendTestNotification);
+document.getElementById("unsubscribe").addEventListener("click", unsubscribeUser);
