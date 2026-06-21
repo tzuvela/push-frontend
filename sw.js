@@ -13,6 +13,6 @@ self.addEventListener("push", event => {
     //     body: data.body
     // self.registration.showNotification("New Message", {body: text});
     event.waitUntil(
-        self.registration.showNotification("Push Demo", options)
+        self.registration.showNotification("", options)
     )
 });
